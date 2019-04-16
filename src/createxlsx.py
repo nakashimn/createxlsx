@@ -1,9 +1,4 @@
-import os
-import sys
 import itertools
-import pandas as pd
-import numpy as np
-import openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.chart import ScatterChart
 from openpyxl.chart import BarChart
@@ -89,12 +84,16 @@ def create_scatter_chart(x_cells, y_cells, x_title, y_title, x_range=None, y_ran
         chart.legend = None
     else:
         chart.legend.position = "t"
-    if type(y_cells) != list:
+    if type(x_cells) != list and type(y_cells) != list:
         series = Series(y_cells, x_cells, title=legends)
         chart.series.append(series)
-    else:
+    elif type(x_cells) != list and type(y_cells) == list:
         for y_cells_unit, legend in zip(y_cells, legends):
             series = Series(y_cells_unit, x_cells, title=legend)
+            chart.series.append(series)
+    elif type(x_cells) == list and type(y_cells) == list:
+        for x_cells_unit, y_cells_unit, legend in zip(x_cells, y_cells, legends):
+            series = Series(y_cells_unit, x_cells_unit, title=legend)
             chart.series.append(series)
     return chart
 
